@@ -1,0 +1,18 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/BASH_ENV/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/BASH_ENV/operation=replace
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/BASH_ENV/value=/usr/share/Modules/init/bash
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/BASH_FUNC__module_raw%%/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/BASH_FUNC__module_raw%%/operation=append
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/BASH_FUNC__module_raw%%/value=() {  unset _mlshdbg;\n if [ "${MODULES_SILENT_SHELL_DEBUG\:-0}" \= '1' ]; then\n case "$-" in \n *v*x*)\n set +vx;\n _mlshdbg\='vx'\n ;;\n *v*)\n set +v;\n _mlshdbg\='v'\n ;;\n *x*)\n set +x;\n _mlshdbg\='x'\n ;;\n *)\n _mlshdbg\=''\n ;;\n esac;\n fi;\n unset _mlre _mlIFS;\n if [ -n "${IFS+x}" ]; then\n _mlIFS\=$IFS;\n fi;\n IFS\=' ';\n for _mlv in ${MODULES_RUN_QUARANTINE\:-};\n do\n if [ "${_mlv}" \= "${_mlv\#\#*[\!A-Za-z0-9_]}" -a "${_mlv}" \= "${_mlv\#[0-9]}" ]; then\n if [ -n "`eval 'echo ${'$_mlv'+x}'`" ]; then\n _mlre\="${_mlre\:-}${_mlv}_modquar\='`eval 'echo ${'$_mlv'}'`' ";\n fi;\n _mlrv\="MODULES_RUNENV_${_mlv}";\n _mlre\="${_mlre\:-}${_mlv}\='`eval 'echo ${'$_mlrv'\:-}'`' ";\n fi;\n done;\n if [ -n "${_mlre\:-}" ]; then\n eval `eval ${_mlre}/usr/bin/tclsh /usr/share/Modules/libexec/modulecmd.tcl bash '"$@"'`;\n else\n eval `/usr/bin/tclsh /usr/share/Modules/libexec/modulecmd.tcl bash "$@"`;\n fi;\n _mlstatus\=$?;\n if [ -n "${_mlIFS+x}" ]; then\n IFS\=$_mlIFS;\n else\n unset IFS;\n fi;\n unset _mlre _mlv _mlrv _mlIFS;\n if [ -n "${_mlshdbg\:-}" ]; then\n set -$_mlshdbg;\n fi;\n unset _mlshdbg;\n return $_mlstatus\n}
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/LESSOPEN/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/LESSOPEN/operation=replace
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/LESSOPEN/value=||/usr/bin/lesspipe.sh %s
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/PATH/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/PATH/operation=replace
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/PATH/value=/home/abcool/.local/bin\:/home/abcool/bin\:/home/abcool/.local/bin\:/home/abcool/bin\:/usr/share/Modules/bin\:/usr/local/bin\:/usr/local/sbin\:/usr/bin\:/usr/sbin
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/SHELL/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/SHELL/operation=replace
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/SHELL/value=/bin/bash
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/append=true
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/appendContributed=true

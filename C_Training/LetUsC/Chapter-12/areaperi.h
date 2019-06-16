@@ -1,0 +1,6 @@
+#define TRIAREA(a,b,c) (sqrt(((a+b+c)/2)*(((a+b+c)/2)-a)*(((a+b+c)/2)-b)*(((a+b+c)/2)-c)))
+#define TRIPERI(x,y,z) (x+y+z)
+#define SQAREA(a) (a*a)
+#define SQPERI(a) (4*a)
+#define CIRCAREA(a) (3.14*a*a)
+#define CIRCPERI(a) (2*3.14*a)

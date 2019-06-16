@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/PATH/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/PATH/operation=replace
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/PATH/value=/home/abcool/.local/bin\:/home/abcool/bin\:/home/abcool/.local/bin\:/home/abcool/bin\:/usr/share/Modules/bin\:/usr/local/bin\:/usr/local/sbin\:/usr/bin\:/usr/sbin
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/append=true
+environment/project/cdt.managedbuild.config.gnu.exe.debug.1939951753/appendContributed=true
