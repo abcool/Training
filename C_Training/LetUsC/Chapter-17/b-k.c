@@ -5,6 +5,7 @@ Version   Date       Author          Changelog
 -----------------------------------------------------------
 1.0    18/06/2019  Arvind Bakshi    Initial Version
 1.1    20/06/2019  Arvind Bakshi    Fixed segmentation fault issue
+2.0    20/06/2019  Arvind Bakshi    Replaced whole logic with a working one
 -----------------------------------------------------------
 Copyright @AbCool Codings....
 */
@@ -46,33 +47,23 @@ struct node *add(struct node *n){
   int val;
   puts("Enter a value");
   scanf("%d",&val);
-  struct node *temp;
+  struct node *temp,*ptr=n;
   temp=(struct node *)malloc(sizeof(struct node));
   temp->data = val;
-  if(n==NULL){
-    temp->next=NULL;
+  if(n==NULL || val<n->data){
+    temp->next=n;
     n=temp;
   }else{
-    struct node *ptr1,*ptr2;
-    ptr1=n;
-    int pos=0;
-    while(val>=ptr1->data){
-      pos++;
-      ptr1=ptr1->next;
+    while(ptr->next!=NULL){
+      if(ptr->data<=val &&(ptr->next->data>val || ptr->next==NULL)){
+        temp->next=ptr->next;
+        ptr->next=temp;
+        return n;
+      }
+      ptr=ptr->next;
     }
-    if(pos==0){
-      temp->next=n;
-      n=temp;
-    }else if(pos==1){
-      ptr1=n;
-      ptr1->next=temp;
-      temp->next=NULL;
-    }else{
-    ptr1=n+((pos-1)*sizeof(struct node));
-    ptr2=n+(pos*sizeof(struct node));
-    ptr1->next=temp;
-    temp->next=ptr2;
-  }
+    temp->next=NULL;
+    ptr->next=temp;
   }
   return n;
 }
@@ -85,5 +76,6 @@ void display(struct node *n){
       printf("|%d|->",ptr->data);
       ptr=ptr->next;
     }
+    printf("NULL\n");
   }
 }
