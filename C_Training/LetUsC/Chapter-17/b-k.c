@@ -4,6 +4,7 @@ Program to implement ascending order linked list
 Version   Date       Author          Changelog
 -----------------------------------------------------------
 1.0    18/06/2019  Arvind Bakshi    Initial Version
+1.1    20/06/2019  Arvind Bakshi    Fixed segmentation fault issue
 -----------------------------------------------------------
 Copyright @AbCool Codings....
 */
@@ -62,6 +63,10 @@ struct node *add(struct node *n){
     if(pos==0){
       temp->next=n;
       n=temp;
+    }else if(pos==1){
+      ptr1=n;
+      ptr1->next=temp;
+      temp->next=NULL;
     }else{
     ptr1=n+((pos-1)*sizeof(struct node));
     ptr2=n+(pos*sizeof(struct node));
