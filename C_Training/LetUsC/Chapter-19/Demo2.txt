@@ -1,4 +1,7 @@
 This is a sample file for testing
 File Reading in C
 by Arvind Bakshi
+This is a sample file for testing
+File Reading in C
+by Arvind Bakshi
 and some text here
