@@ -20,12 +20,14 @@ int main(){
   }
   while(1){
     l_no++;
-    if((ch=fgetc(fp))==EOF){
+    ch=fgetc(fp);
+    if(ch==EOF){
       break;
     }else{
       printf("%d \t",l_no);
-      while((ch=fgetc(fp))!='\n'){
+      while(ch!='\n'){
         printf("%c",ch);
+        ch=fgetc(fp);
       }
       printf("\n");
     }
