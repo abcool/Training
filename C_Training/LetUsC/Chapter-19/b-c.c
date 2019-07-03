@@ -14,12 +14,13 @@ struct student{
   int age;
 };
 void add(struct student **, int);
+void SortFileByName(FILE *);
 int main(){
   FILE *fp;
   int r,i=0;
   puts("Enter number of records to write");
   scanf("%d",&r);
-  struct student *s=NULL;
+  struct student *s;
   add(&s,r);
   fp = fopen("EMP.dat","wb");
   while(i<r){
@@ -28,10 +29,17 @@ int main(){
   }
   free(s);
   fclose(fp);
-  /*fp = fopen("EMP.dat","rb");
+  fp = fopen("EMP.dat","rb");
+  SortFileByName(fp);
   i=0;
-  FILE *fp2 = fp;
-  while(fread())*/
+  puts("Records after sorting");
+  while(i<r){
+    fread(&s[i],sizeof(s[i]),1,fp);
+    printf("Record: %d\n",i);
+    printf("Name: %s \t",s[i].name);
+    printf("Age: %d\n",s[i].age);
+    i++;
+  }
   return 0;
 }
 void add(struct student **t, int n){
@@ -40,9 +48,13 @@ void add(struct student **t, int n){
   while(i<n){
     printf("Enter student %d details\n",i+1);
     puts("Enter student's name");
-    scanf("%[^\n]s",(*(t+i))->name);
+    scanf(" %[^\n]s",(*t+i)->name);
     puts("Enter student's age");
-    scanf("%d",&(*(t+i))->age);
+    scanf("%d",&(*t+i)->age);
     i++;
   }
+}
+//Function to sort records in file by name
+void SortFileByName(FILE *fp){
+
 }
