@@ -46,17 +46,27 @@ int main(){
     }
     printf("\n");
   }
-  puts("Vertical Histogram");
+  int max_len=len[0];
   for(i=0;i<5;i++){
-    int j;
-    j=len[i];
-    //printf("|");
-    while(j>0){
-      printf("|\n");
-      j--;
+    if(len[i]>max_len){
+      max_len=len[i];
     }
-    printf("_");
-    printf("\t");
   }
+  puts("Vertical Histogram");
+  while(max_len>0){
+    for(i=0;i<5;i++){
+      if(len[i]<max_len){
+        printf(" ");
+      }else{
+        printf("|");
+      }
+    }
+    printf("\n");
+    max_len--;
+  }
+  for(i=0;i<5;i++){
+    printf("-");
+  }
+  printf("\n");
 return 0;
 }
