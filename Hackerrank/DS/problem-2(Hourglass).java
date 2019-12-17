@@ -11,7 +11,7 @@ public class Solution {
     
     // Complete the hourglassSum function below.
     static int hourglassSum(int[][] arr) {
-        int finalSum=0;
+        int finalSum=-200;
         for(int r=0;r<4;r++){ // scan row wise fro 0 to 3
             int sum=0;
             for(int c=0;c<4;c++){ // for each row, calculate hourglass from column 0 to 3
