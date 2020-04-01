@@ -1,0 +1,8 @@
+# Comment
+temfile.txt
+log/*.log
+*.zip
+*.gz
+assets/photoshop
+assets/videos
+!assets/videos/tour_*.mp4
