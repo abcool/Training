@@ -1,0 +1,28 @@
+Customer
+Object store to staging
+Pipeline Name: Load Customer Staging Data
+
+Staging Tables:
+
+1. STG_PARTY_DETAILS
+2. STG_CUSTOMER_ALT_CCY_VALUES
+3. STG_PARTY_MASTER
+4. STG_PHONE_MASTER
+5. STG_ACCOUNT_PHONE_MAP
+6. STG_ADDRESS_MASTER
+7. STG_PARTY_ADDRESS_MAP
+8. STG_PARTY_EMAIL_MAP
+9. STG_PARTY_PARTY_RELATIONSHIP
+10. STG_CUST_ANTICIPATORY_PROFILE
+11. STG_COUNTRY_MASTER
+12. STG_EMAIL_MASTER
+13. STG_PARTY_ACCOUNT_ROLE_MAP
+14. STG_PARTY_PHONE_MAP
+
+Staging to FCC_Customer_XXX ()
+
+Pipeline Name: 
+Load Customer Data
+Load Customer Additional Data
+Load Customer Anticipatory Profile Data
+Load Customer Mapping Data - TBD
