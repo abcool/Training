@@ -1,0 +1,11 @@
+<html>
+    <head>
+        <title> Require JS Demo</title>
+        <script type="text/javascript" src="js/require.js" data-main="js/config"></script>
+        <script>
+            require(['config',function(){
+                require(['customScript']);
+            }]);
+        </script>
+    </head>
+</html>
