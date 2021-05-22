@@ -12,10 +12,11 @@ Algo Tower(n,s,a,d){
         print s-> d
         return
     }
-    // Move n-1 discs from source to auxillary using destination as an intermediate
+    // Move top n-1 discs from source to auxillary using destination as an intermediate
     call Tower(n-1,s,d,a)
+    // Move the single bottommost disk to destination
         print s-> d
-    // Move n-1 discs from auxillary to destination using source as an intermediate
+    // Move top n-1 discs from auxillary to destination using source as an intermediate
     call Tower(n-1,a,s,d)
     return
 }
