@@ -1,6 +1,11 @@
 package com.abcool.entity;
 
+import javax.json.bind.annotation.JsonbProperty;
+import javax.json.bind.annotation.JsonbTransient;
+
 public class Car {
+    
+    @JsonbTransient
     private String identifier;
     private Color color;
     private EngineType engineType;
