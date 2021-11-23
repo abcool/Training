@@ -24,6 +24,7 @@ public class CarResource {
     @Path("createCar")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Car createCar(Specification specification){
         return carManufacturer.manufactureCar(specification);
     }

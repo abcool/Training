@@ -1,5 +1,6 @@
 package com.abcool.entity;
 
+
 import javax.validation.constraints.NotNull;
 
 public class Specification {
@@ -9,6 +10,7 @@ public class Specification {
     @NotNull
     private EngineType engineType;
 
+    public Specification(){}
     public Specification(Color color, EngineType engineType) {
         this.color = color;
         this.engineType = engineType;
