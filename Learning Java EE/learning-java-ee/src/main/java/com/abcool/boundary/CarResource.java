@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.stream.JsonCollectors;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -48,7 +50,7 @@ public class CarResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createCar(Specification specification){
+    public Response createCar(@Valid @NotNull Specification specification){
         Car car = carManufacturer.manufactureCar(specification);
         URI uri = uriInfo.getBaseUriBuilder()
                 .path(CarResource.class)

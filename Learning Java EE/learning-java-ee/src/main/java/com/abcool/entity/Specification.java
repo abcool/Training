@@ -1,6 +1,8 @@
 package com.abcool.entity;
 
 
+import com.abcool.utils.EnvironmentalFriendly;
+
 import javax.validation.constraints.NotNull;
 
 public class Specification {
@@ -8,6 +10,7 @@ public class Specification {
     private Color color;
 
     @NotNull
+    @EnvironmentalFriendly
     private EngineType engineType;
 
     public Specification(){}
