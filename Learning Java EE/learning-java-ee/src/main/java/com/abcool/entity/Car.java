@@ -1,14 +1,27 @@
 package com.abcool.entity;
 
-import javax.json.bind.annotation.JsonbProperty;
-import javax.json.bind.annotation.JsonbTransient;
+import static com.abcool.entity.Car.FIND_ALL_CARS;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "cars")
+@NamedQuery(name = FIND_ALL_CARS, query="select c from Car c")
 public class Car {
 
-    @JsonbTransient
+    public static final String FIND_ALL_CARS="Car.findAll";
+
+    @Id
     private String identifier;
+    @Enumerated(EnumType.STRING)
     private Color color;
+    @Enumerated(EnumType.STRING)
     private EngineType engineType;
+    @OneToMany(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "car", nullable = false)
+    private Set<Seat> seats = new HashSet<>();
 
     public String getIdentifier() {
         return identifier;
@@ -34,7 +47,11 @@ public class Car {
         this.engineType = engineType;
     }
 
+    public Set<Seat> getSeats() {
+        return seats;
+    }
 
-
-
+    public void setSeats(Set<Seat> seats) {
+        this.seats = seats;
+    }
 }
