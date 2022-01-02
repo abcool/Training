@@ -15,7 +15,7 @@ import org.jboss.logging.Logger;
 /**
  * Servlet Filter implementation class ParameterLoggingFilter
  */
-@WebFilter(urlPatterns="/*",asyncSupported = true)
+@WebFilter(urlPatterns="/*")
 public class ParameterLoggingFilter implements Filter {
 	
 	private static final Logger logger = Logger.getLogger(ParameterLoggingFilter.class);
