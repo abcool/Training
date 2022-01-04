@@ -45,16 +45,29 @@ body {
 				<td width="100%" colspan="2">
 					<table width="100%" align="left"
 						cellpadding="0" cellspacing="0" border="0">
+						${pageContext.request.contextPath }<br/>
+						${param.name }<br/>
+						<h3> Cookie: ${cookie.CatalogCookie.value }</h3><br/>
+						<h3>Total items in Catalog: ${CatalogItems.size() }</h3>
 						<tbody>
 							<tr>
-								<td align="center" width="100%" valign="middle">
-									<c:forEach var="item" items="${CatalogItems}">
-										${item.name}&nbsp;&nbsp;
-										${item.manufacturer}&nbsp;&nbsp;
-										${item.sku}&nbsp;&nbsp;
-									</c:forEach>
+								<th>Name</th>
+								<th>Manufacturer</th>
+								<th>SKU</th>
+							</tr>
+							<c:forEach var="item" items="${CatalogItems}">
+							<tr>
+								<td>
+									<c:out value="${item.name}"></c:out>		
+								</td>
+								<td>
+									<c:out value="${item.manufacturer}"></c:out>
+								</td>
+								<td>
+									<c:out value="${item.sku}"></c:out>
 								</td>
 							</tr>
+							</c:forEach>
 						</tbody>
 					</table>
 				</td>
