@@ -13,7 +13,7 @@ class Result {
        // Method 1 
        /* int i=0;
         int size=c.size();
-        while(i<=size-1){
+        while(i<size-1){
             if(((i+2)<size) && (c.get(i+2)!=1)){
                 no_of_jumps+=1;
                 i+=2;
@@ -24,7 +24,7 @@ class Result {
                 i+=1;
                 continue;
             }
-            i++;
+            //i++;
         }*/
         
      // Method 2
