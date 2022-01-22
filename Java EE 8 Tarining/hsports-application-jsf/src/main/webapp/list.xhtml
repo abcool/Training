@@ -5,20 +5,25 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html">
 
 <ui:composition template="/template.xhtml">
-<ui:define name="pageHeader">#{msg['list.pageHeader']}</ui:define>
+<ui:define name="pageHeader">#{msg['list.pageTitle']}</ui:define>
 <ui:define name="body">
 	<div>
-		<h:outputLabel value="Name: " />
-		<h:outputLabel value="#{backingBean.name}" />
-	</div>
-	<div>
-		<h:outputLabel value="Manufacturer: " />
-		<h:outputLabel value="#{backingBean.manufacturer}" />
-	</div>
-	<div>
-		<h:outputLabel value="Sku: " />
-		<h:outputLabel value="#{backingBean.sku}" />
-	</div>
-	</ui:define>
+			<h:outputLabel value="Product Name: " />
+			<h:outputLabel value="#{catalogItemFormBean.item.name}" ></h:outputLabel>
+		</div>
+		<div>
+			<h:outputLabel value="Manufacturer: " />
+			<h:outputLabel value="#{catalogItemFormBean.item.manufacturer}" ></h:outputLabel>
+		</div>
+		<div>
+			<h:outputLabel value="Available Date: " />
+			<h:outputText value="#{catalogItemFormBean.item.availableDate}" >
+			</h:outputText>
+		</div>
+		<div>
+			<h:outputLabel value="Description: " />
+			<h:outputLabel value="#{catalogItemFormBean.item.description}" ></h:outputLabel>
+		</div>	
+</ui:define>
 </ui:composition>
 </html>

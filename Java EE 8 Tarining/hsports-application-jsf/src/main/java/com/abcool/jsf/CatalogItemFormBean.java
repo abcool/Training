@@ -1,40 +1,45 @@
 package com.abcool.jsf;
 
 
-import javax.enterprise.context.RequestScoped;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
-@Named("backingBean")
-@RequestScoped
-public class CatalogItemFormBean {
-	private String name,manufacturer,sku;
+@Named
+@SessionScoped
+public class CatalogItemFormBean implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3602124267848495220L;
 	
-
-	public CatalogItemFormBean() {
+	private CatalogItem item = new CatalogItem();
+	private List<CatalogItem> items = new ArrayList<>();
+	
+	public String addItem() {
+		long itemId = items.size()+1;
+		this.items.add(new CatalogItem(itemId, this.item.getName(),this.item.getManufacturer(),
+				this.item.getDescription(),this.item.getAvailableDate()));
+		return "list?faces-redirect=true";
 	}
-
-	public String getName() {
-		return name;
+	
+	public CatalogItem getItem() {
+		return item;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setItem(CatalogItem item) {
+		this.item = item;
 	}
-
-	public String getManufacturer() {
-		return manufacturer;
+	public List<CatalogItem> getItems() {
+		return items;
 	}
-
-	public void setManufacturer(String manufacturer) {
-		this.manufacturer = manufacturer;
+	public void setItems(List<CatalogItem> items) {
+		this.items = items;
 	}
-
-	public String getSku() {
-		return sku;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
-
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
+	
 	
 }
