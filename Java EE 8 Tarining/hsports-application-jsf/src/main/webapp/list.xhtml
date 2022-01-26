@@ -6,7 +6,10 @@
 
 <ui:composition template="/template.xhtml">
 <ui:define name="pageTitle">#{msg['list.pageTitle']}</ui:define>
-<ui:define name="pageHeader">#{msg['form.pageTitle']}</ui:define>
+<ui:define name="pageHeader">
+	<h:link value= "#{msg['form.pageTitle']}" outcome="form"/> |
+	<h:link value= "#{msg['list.pageTitle']}" outcome="list"/>
+</ui:define>
 <ui:define name="body">
 	<h:dataTable value="#{catalogItemFormBean.items}" var="item">
 		<h:column>
@@ -25,6 +28,11 @@
 		<h:column>
 			<f:facet name="header">Description</f:facet>
 			<h:outputLabel value="#{item.description}" ></h:outputLabel>
+		</h:column>
+		<h:column>
+			<h:link value="Remove Item" outcome="confirm">
+				<f:param name="itemId" value="#{item.itemId}" />
+			</h:link>
 		</h:column>	
 	</h:dataTable>
 </ui:define>

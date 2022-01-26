@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<ui:composition template="/template.xhtml">
+<ui:define name="pageTitle">Confirm</ui:define>
+<ui:define name="pageHeader">Confirm Delete Item</ui:define>
+<f:metadata>
+	<f:viewParam name="itemId" value="#{catalogItemDeleteBean.itemId}"></f:viewParam>
+	<f:event listener="#{catalogItemDeleteBean.fetchItem()}" type="preRenderView"></f:event>
+</f:metadata>
+<ui:define name="body">
+	<h:form>
+		<h3>Please confirm that you would like to delete the following item!</h3>
+		<div>
+			<h:outputLabel value="Product Name: " />
+			<h:outputText value="#{catalogItemDeleteBean.item.name}" />
+		</div>
+		<div>
+			<h:outputLabel value="Manufacturer: " />
+			<h:outputText value="#{catalogItemDeleteBean.item.manufacturer}" />
+		</div>
+		<div>
+			<h:outputLabel value="Available Date: " />
+			<h:outputLabel value="#{catalogItemDeleteBean.item.availableDate}" >
+				<f:convertDateTime type="localDate" pattern="dd-MM-yyyy"/>
+			</h:outputLabel>
+		</div>
+		<div>
+			<h:outputLabel value="Description: " />
+			<h:outputLabel value="#{catalogItemDeleteBean.item.description}" />
+		</div>
+		<div>
+			<h:commandButton action="#{catalogItemDeleteBean.removeItem()}" value="Confirm" />
+			<h:commandButton action="list" value="Cancel" />
+		</div>
+	</h:form>
+</ui:define>
+</ui:composition>
+</html>
