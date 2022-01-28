@@ -4,8 +4,13 @@ package com.abcool.jsf;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+
+import com.abcool.CatalogItem;
+import com.abcool.ICatalog;
 
 @Named
 @SessionScoped
@@ -15,14 +20,20 @@ public class CatalogItemFormBean implements Serializable{
 	 */
 	private static final long serialVersionUID = -3602124267848495220L;
 	
+	@EJB
+	private ICatalog catalogBean;
 	private CatalogItem item = new CatalogItem();
 	private List<CatalogItem> items = new ArrayList<>();
 	
 	public String addItem() {
-		long itemId = items.size()+1;
-		this.items.add(new CatalogItem(itemId, this.item.getName(),this.item.getManufacturer(),
+		long itemId = this.catalogBean.getItems().size()+1;
+		this.catalogBean.addItem(new CatalogItem(itemId, this.item.getName(),this.item.getManufacturer(),
 				this.item.getDescription(),this.item.getAvailableDate()));
 		return "list?faces-redirect=true";
+	}
+	
+	public void init() {
+		this.items = this.catalogBean.getItems();
 	}
 	
 	public CatalogItem getItem() {

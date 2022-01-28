@@ -1,4 +1,4 @@
-package com.abcool.jsf;
+package com.abcool;
 
 import java.time.LocalDate;
 
