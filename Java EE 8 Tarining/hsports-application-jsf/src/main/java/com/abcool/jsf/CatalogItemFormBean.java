@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.abcool.CatalogItem;
@@ -20,8 +21,12 @@ public class CatalogItemFormBean implements Serializable{
 	 */
 	private static final long serialVersionUID = -3602124267848495220L;
 	
-	@EJB
+	@Inject
 	private ICatalog catalogBean;
+	
+	@Inject
+	private IInventory inventoryService;
+	
 	private CatalogItem item = new CatalogItem();
 	private List<CatalogItem> items = new ArrayList<>();
 	
@@ -29,6 +34,7 @@ public class CatalogItemFormBean implements Serializable{
 		long itemId = this.catalogBean.getItems().size()+1;
 		this.catalogBean.addItem(new CatalogItem(itemId, this.item.getName(),this.item.getManufacturer(),
 				this.item.getDescription(),this.item.getAvailableDate()));
+		this.inventoryService.createItem(this.item.getItemId(), this.item.getName());
 		return "list?faces-redirect=true";
 	}
 	
