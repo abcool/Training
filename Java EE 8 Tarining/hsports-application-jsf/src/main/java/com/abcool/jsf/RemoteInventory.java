@@ -6,23 +6,21 @@ import java.util.Map.Entry;
 
 import javax.enterprise.inject.Alternative;
 
-//@Dependent by default
-//@RequestScoped
-//@ApplicationScoped
+@RemoteService
 @Alternative
-public class LocalInventory implements IInventory {
+public class RemoteInventory implements IInventory{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8368266249325191550L;
-
+	private static final long serialVersionUID = -2366660323276337783L;
 	private Map<Long,InventoryItem> items = new HashMap<>();
+	
 	@Override
 	public void createItem(Long catalogItemId, String name) {
 		long inventoryItemId = items.size()+1;
 		this.items.put(catalogItemId, new InventoryItem(inventoryItemId,catalogItemId,0L,name));
-		this.printInventory();
+		printInventory();
 	}
 
 	@Override
@@ -32,7 +30,7 @@ public class LocalInventory implements IInventory {
 	
 	private void printInventory() {
 		for(Entry<Long,InventoryItem> entry: items.entrySet()) {
-			System.out.println("Local Inventory contains: ");
+			System.out.println("Remote Inventory contains: ");
 			System.out.println("Item name: "+entry.getValue().name);
 		}
 	}
