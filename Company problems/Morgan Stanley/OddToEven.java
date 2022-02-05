@@ -1,3 +1,18 @@
+/*
+Given an odd number in the form of string, 
+the task is to make largest even number possible from the given number provided one is allowed to do only one swap operation, 
+if no such number is possible then return the input string itself.
+
+Input 1:
+s = 4543
+Output: 4534
+Explanation: Swap 4(3rd pos) and 3.
+
+Input 2:
+s = 1539
+Output: 1539
+Explanation: No even no. present.
+*/
 public class OddToEven{
 	 public static String makeEven(String s){
        char[] charArr = s.toCharArray();
