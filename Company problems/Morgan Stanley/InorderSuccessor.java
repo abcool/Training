@@ -75,6 +75,29 @@ class Solution
                     return list.get(i+1);
             }
             return null;
+			/*
+			Method 2:
+			
+			if(root == null || x == null)
+                return null;
+            
+            Node succ = null;
+            
+            while(root!=null)
+            {
+                if(root.data <= x.data)
+                root = root.right;
+                
+                else{
+                    
+                    succ = root;
+                    
+                    root = root.left;
+                }
+            }
+            
+            return succ;
+			*/
         }
 }
 
