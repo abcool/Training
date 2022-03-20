@@ -151,6 +151,117 @@ class Codechef
             System.out.println();
         }
     }
+	/*
+		1 2 3 4 5 
+		1 2 3 4 
+		1 2 3 
+		1 2 
+		1 
+	*/
+	private static void invertedPattern(int n){
+		for(int i=1;i<=n;i++){
+		    for(int j=1;j<=(n-i)+1;j++){
+			System.out.print(j+" ");
+		    }
+		    System.out.println();
+		}
+    	}
+	
+	/*
+		1 
+		0 1 
+		1 0 1 
+		0 1 0 1 
+		1 0 1 0 1 
+	*/
+	private static void zeroOnePattern(int n){
+		for(int i=1;i<=n;i++){
+		    for(int j=1;j<=i;j++){
+			if((i+j)%2==0)
+			    System.out.print("1 ");
+			else
+			    System.out.print("0 ");
+		    }
+		    System.out.println();
+		}
+    	}
+	
+	/*
+		    * * * * * 
+		   * * * * * 
+		  * * * * * 
+		 * * * * * 
+		* * * * * 
+	*/
+	private static void rhombusPattern(int n){
+		for(int i=1;i<=n;i++){
+		    for(int j=1;j<=n-i;j++)
+			System.out.print(" ");
+		    for(int j=1;j<=n;j++){
+			System.out.print("* ");
+		    }
+		    System.out.println();
+		}
+    	}
+	
+	/*
+	    1 
+	   1 2 
+	  1 2 3 
+	 1 2 3 4 
+	1 2 3 4 5 
+	
+	*/
+	private static void numberPattern(int n){
+		for(int i=1;i<=n;i++){
+		    for(int j=1;j<=n-i;j++)
+			System.out.print(" ");
+		    for(int j=1;j<=i;j++)
+			System.out.print(j + " ");
+		    System.out.println();
+		}
+    	}
+	
+	/*
+	        1 
+	      2 1 2 
+	    3 2 1 2 3 
+	  4 3 2 1 2 3 4 
+	5 4 3 2 1 2 3 4 5 
+
+	*/
+	private static void palindromicPattern(int n){
+		/*for(int i=1;i<=n;i++){
+		    for(int j=1;j<=n-i;j++)
+			System.out.print(" ");
+
+		    for(int j=i;j>=1;j--)
+			System.out.print(j);
+
+		    for(int j=2;j<=i;j++){
+			System.out.print(j);
+		    }
+
+		    System.out.println();
+		}*/
+		for(int i=1;i<=n;i++){
+		    int j;
+		    for(j=1;j<=n-i;j++){
+			System.out.print("  ");
+		    }
+		    int k=i;
+		    for(;j<=n;j++){
+			System.out.print(k--);
+			System.out.print(" ");
+		    }
+		    k=2;
+		    for(;j<=n+i-1;j++){
+			System.out.print(k++);
+			System.out.print(" ");
+		    }
+		    System.out.println();
+		}
+    	}
 	public static void main (String[] args) throws java.lang.Exception
 	{
 		/*int rows = 5, cols=4;
@@ -160,6 +271,10 @@ class Codechef
 		//halfPyramid(n);
 		//halfPyramidNumber(n);
 		//floydTriangle(n);
-		butterfly(4);
+		//butterfly(4);
+		//invertedPattern(5);
+		//zeroOnePattern(5);
+		//rhombusPattern(5);
+		numberPattern(5);
 	}
 }
