@@ -262,6 +262,51 @@ class Codechef
 		    System.out.println();
 		}
     	}
+	
+	/*
+	   *
+	  ***
+	 *****
+	*******
+	*******
+	 *****
+	  ***
+	   *
+
+	*/
+	private static void starPattern(int n){
+		for(int i=1;i<=n;i++){
+		    for(int j=1;j<=n-i;j++)
+			System.out.print(" ");
+		    for(int j=1;j<=(2*i)-1;j++)
+			System.out.print("*");
+		    System.out.println();
+		}
+		for(int i=n;i>=1;i--){
+		    for(int j=1;j<=n-i;j++)
+			System.out.print(" ");
+		    for(int j=1;j<=(2*i)-1;j++)
+			System.out.print("*");
+		    System.out.println();
+		}
+    	}
+	
+	/*
+		    *       *       *     
+		  *   *   *   *   *   *   
+		*       *       *       * 
+	*/
+	private static void zigZagPattern(int n){
+		for(int i=1;i<=3;i++){
+		    for(int j=1;j<=n;j++){
+			if((i+j)%4==0 || (i==2 && j%4==0))
+			    System.out.print("* ");
+			else
+			    System.out.print("  ");
+		    }
+		    System.out.println();
+		}
+    	}
 	public static void main (String[] args) throws java.lang.Exception
 	{
 		/*int rows = 5, cols=4;
@@ -275,6 +320,9 @@ class Codechef
 		//invertedPattern(5);
 		//zeroOnePattern(5);
 		//rhombusPattern(5);
-		numberPattern(5);
+		//numberPattern(5);
+		//palindromicPattern(5);
+		//starPattern(4);
+		zigZagPattern(13);
 	}
 }
