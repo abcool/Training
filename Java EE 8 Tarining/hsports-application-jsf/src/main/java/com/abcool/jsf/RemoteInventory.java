@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import javax.enterprise.inject.Alternative;
 
 @RemoteService
-@Alternative
+//@Alternative
 public class RemoteInventory implements IInventory{
 
 	/**
@@ -17,6 +17,7 @@ public class RemoteInventory implements IInventory{
 	private Map<Long,InventoryItem> items = new HashMap<>();
 	
 	@Override
+	@Logging
 	public void createItem(Long catalogItemId, String name) {
 		long inventoryItemId = items.size()+1;
 		this.items.put(catalogItemId, new InventoryItem(inventoryItemId,catalogItemId,0L,name));

@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
 
 //@Dependent by default
 //@RequestScoped
-//@ApplicationScoped
-@Alternative
+@ApplicationScoped
+//@Alternative
 public class LocalInventory implements IInventory {
 
 	/**
@@ -19,6 +20,7 @@ public class LocalInventory implements IInventory {
 
 	private Map<Long,InventoryItem> items = new HashMap<>();
 	@Override
+	@Logging
 	public void createItem(Long catalogItemId, String name) {
 		long inventoryItemId = items.size()+1;
 		this.items.put(catalogItemId, new InventoryItem(inventoryItemId,catalogItemId,0L,name));
@@ -29,7 +31,7 @@ public class LocalInventory implements IInventory {
 	public Long getQuantity(Long catalogItemId) {
 		return 0L;
 	}
-	
+	@Logging
 	private void printInventory() {
 		for(Entry<Long,InventoryItem> entry: items.entrySet()) {
 			System.out.println("Local Inventory contains: ");
