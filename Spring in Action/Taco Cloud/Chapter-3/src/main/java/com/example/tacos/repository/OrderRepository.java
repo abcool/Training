@@ -1,2 +1,8 @@
-package com.example.tacos.repository;public interface OrderRepository {
+package com.example.tacos.repository;
+
+import com.example.tacos.domain.TacoOrder;
+
+public interface OrderRepository {
+
+    TacoOrder saveOrder(TacoOrder order);
 }

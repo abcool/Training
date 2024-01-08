@@ -1,6 +1,7 @@
 package com.example.tacos.controller;
 
 import com.example.tacos.domain.TacoOrder;
+import com.example.tacos.repository.OrderRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,12 @@ import org.springframework.web.bind.support.SessionStatus;
 @RequestMapping(path = "/orders")
 @SessionAttributes(value = {"tacoOrder"})
 public class OrderController {
+    private OrderRepository orderRepository;
+
+    public OrderController(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
     @GetMapping(path = "/current")
     public String orderForm(){
         return "orderForm";
@@ -26,6 +33,7 @@ public class OrderController {
             log.info("Invalid order, try again");
             return "orderForm";
         }
+        orderRepository.saveOrder(order);
         log.info("Order submitted: {}",order);
         sessionStatus.setComplete();
         return "redirect:/";

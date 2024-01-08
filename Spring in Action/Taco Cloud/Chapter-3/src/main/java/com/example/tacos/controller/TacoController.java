@@ -4,8 +4,10 @@ import com.example.tacos.domain.Ingredient;
 import com.example.tacos.domain.Taco;
 import com.example.tacos.domain.TacoOrder;
 import com.example.tacos.domain.Type;
+import com.example.tacos.repository.IngredientRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -20,9 +22,16 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/designTaco")
 @SessionAttributes(value = {"tacoOrder"})
 public class TacoController {
+    @Autowired
+    private final IngredientRepository ingredientRepository;
+
+    public TacoController(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
+    }
+
     @ModelAttribute
     public void addIngredients(Model model){
-        List<Ingredient> ingredients = Arrays.asList(
+        /*List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
                 new Ingredient("COTO","Corn Tortilla", Type.WRAP),
                 new Ingredient("GRBF","Ground Beef", Type.PROTEIN),
@@ -33,7 +42,9 @@ public class TacoController {
                 new Ingredient("JACK","Monterrey Jack",Type.CHEESE),
                 new Ingredient("SLSA","Salsa",Type.SAUCE),
                 new Ingredient("SRCR","Sour Cream",Type.SAUCE)
-        );
+        );*/
+
+        List<Ingredient> ingredients = ingredientRepository.findAll();
 
         Type[] types = Type.values();
         for (Type type : types) {
