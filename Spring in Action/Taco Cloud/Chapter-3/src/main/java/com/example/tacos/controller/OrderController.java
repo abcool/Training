@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import java.util.Date;
+
 @Controller
 @Slf4j
 @RequestMapping(path = "/orders")
@@ -33,7 +35,8 @@ public class OrderController {
             log.info("Invalid order, try again");
             return "orderForm";
         }
-        orderRepository.saveOrder(order);
+        order.setOrderDate(new Date());
+        orderRepository.save(order);
         log.info("Order submitted: {}",order);
         sessionStatus.setComplete();
         return "redirect:/";

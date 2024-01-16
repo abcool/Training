@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,8 @@ public class TacoController {
                 new Ingredient("SRCR","Sour Cream",Type.SAUCE)
         );*/
 
-        List<Ingredient> ingredients = ingredientRepository.findAll();
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
 
         Type[] types = Type.values();
         for (Type type : types) {
@@ -77,6 +79,9 @@ public class TacoController {
     }
 
     private Iterable<Ingredient> filterByType(List<Ingredient> ingredients, Type type){
-        return ingredients.stream().filter(ingredient -> ingredient.getType().equals(type)).collect(Collectors.toList());
+        return ingredients
+                .stream()
+                .filter(ingredient -> ingredient.getType().equals(type))
+                .collect(Collectors.toList());
     }
 }
