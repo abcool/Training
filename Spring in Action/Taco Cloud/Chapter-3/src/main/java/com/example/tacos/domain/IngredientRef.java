@@ -1,3 +1,4 @@
+/*
 package com.example.tacos.domain;
 
 import lombok.Data;
@@ -6,3 +7,4 @@ import lombok.Data;
 public class IngredientRef {
     private final String ingredient;
 }
+*/
