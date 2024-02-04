@@ -1,0 +1,10 @@
+spring:
+  thymeleaf:
+    cache: true
+  data:
+    cassandra:
+      keyspace-name: taco_cloud
+      schema-action: CREATE_IF_NOT_EXISTS
+      local-datacenter: datacenter1
+      contact-points: localhost
+      port: 9042
