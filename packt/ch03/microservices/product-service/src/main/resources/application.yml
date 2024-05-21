@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: microservices/product-service
+
+server:
+  port: 7001
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    edu.learning: DEBUG
