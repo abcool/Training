@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RestController
 public class ProductCompositeServiceImpl implements IProductComposite {
     private final ServiceUtility serviceUtility;
-    private final ProductCompositeHelper helper;
+    private ProductCompositeHelper helper;
 
     public ProductCompositeServiceImpl(ServiceUtility serviceUtility, ProductCompositeHelper helper) {
         this.serviceUtility = serviceUtility;

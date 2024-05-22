@@ -3,6 +3,8 @@ spring:
     name: product-composite-service
 server:
   port: 7000
+  error:
+    include-message: always
 
 logging:
   level:
