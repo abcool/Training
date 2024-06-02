@@ -36,7 +36,6 @@ api:
     apiTermsOfService: MY TERMS OF SERVICE
     apiLicense: MY LICENSE
     licenseURL: MY LICENSE URL
-
     apiExternalDocDesc: MY WIKI PAGE
     externalDocURL: MY WIKI URL
     contact:
@@ -44,13 +43,16 @@ api:
       url: URL TO CONTACT
       email: contact@mail.com
   responseCodes:
-    ok.description: OK
-    badRequest.description: Bad Request, invalid format of the request. See response message for more information
-    notFound.description: Not found, the specified id does not exist
-    unprocessableEntity.description: Unprocessable entity, input parameters caused the processing to fail. See response message for more information
+    ok:
+      description: OK
+    badRequest:
+      description: Bad Request, invalid format of the request. See response message for more information
+    notFound:
+      description: Not found, the specified id does not exist
+    unprocessableEntity:
+      description: Unprocessable entity, input parameters caused the processing to fail. See response message for more information
 
   product-composite:
-
     get-composite-product:
       description: Returns a composite view of the specified product id
       notes: |
