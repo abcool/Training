@@ -1,6 +1,9 @@
 spring:
   application:
     name: microservices/recommendation-service
+  data:
+    mongodb:
+      auto-index-creation: true
 
 server:
   port: 7002

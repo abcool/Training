@@ -27,17 +27,17 @@ dependencies {
     implementation project(':util')
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.mapstruct:mapstruct:${mapstructversion}'
+    implementation "org.mapstruct:mapstruct:${mapstructversion}"
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation platform('org.testcontainers:testcontainers-bom:1.19.8')
-    annotationProcessor 'org.mapstruct:mapstruct-processor:${mapstructversion}'
-    testAnnotationProcessor 'org.mapstruct:mapstruct-processor:${mapstructversion}'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructversion}"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructversion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.testcontainers:testcontainers'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:mongodb'
-    compileOnly 'org.mapstruct:mapstruct-processor:${mapstructversion}'
+    compileOnly "org.mapstruct:mapstruct-processor:${mapstructversion}"
 }
 
 tasks.named('bootBuildImage') {
