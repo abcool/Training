@@ -1,2 +1,9 @@
-package tacos.security;public interface UserDetailsService {
+package tacos.security;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+public interface UserDetailsService {
+
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 }

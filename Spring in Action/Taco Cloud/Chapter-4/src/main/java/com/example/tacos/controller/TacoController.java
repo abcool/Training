@@ -70,7 +70,7 @@ public class TacoController {
             log.info("Wrong inputs, validation failed");
             return "designTaco";
         }
-        tacoOrder.addTaco(new TacoUDT(taco.getName(),taco.getIngredients()));
+        tacoOrder.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
         log.info("Processing taco: {}", taco);
         return "redirect:/orders/current";
     }
