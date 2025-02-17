@@ -10,9 +10,9 @@ public class PredicateInterface {
     private static final Predicate<Integer> checkEven = num -> num%2==0;
     private static final Predicate<Integer> checkDivBy5 = num -> num%5==0;
 
-    private static final Predicate<Student> filterByGrade = student -> student.gradelevel()>=3;
+    public static final Predicate<Student> filterByGrade = student -> student.gradelevel()>=3;
 
-    private static final Predicate<Student> filterByGPA = student -> student.gpa()>=3.9;
+    public static final Predicate<Student> filterByGPA = student -> student.gpa()>=3.9;
 
     private static void filterStudentByGradeLevel(){
         StudentDatabase.getAllStudents().forEach(student -> {
