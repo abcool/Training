@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 public class RefactorForMethodReference {
 
-    static Supplier<Student> getStudent = () -> new Student("John",2,3.6,"male", Arrays.asList("swimming","basketball","volleyball"));
+    static Supplier<Student> getStudent = () -> new Student("John",2,3.6,"male", Arrays.asList("swimming","basketball","volleyball"),11);
 
     static Predicate<Student> checkGradeLevel = RefactorForMethodReference::validateGrade;
 
