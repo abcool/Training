@@ -1,0 +1,24 @@
+[
+  {
+    "movie_id": 1,
+    "name": "Batman Begins",
+    "year": 2008,
+    "cast": "Abcd, PQRS",
+    "release_date": "2008-06-15"
+  },
+  {
+    "movie_id": 2,
+    "name": "Batman and Robin",
+    "year": 2009,
+    "cast": "Abcd, PQRS",
+    "release_date": "2009-06-15"
+  },
+  {
+    "movie_id": 3,
+    "name": "Batman Beyond",
+    "year": 2018,
+    "cast": "Abcd, PQRS",
+    "release_date": "2018-06-15"
+  }
+
+]
