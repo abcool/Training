@@ -1,0 +1,22 @@
+server:
+  port: 7001
+  error:
+    include-message: always
+spring:
+  application:
+    name: product-service
+
+logging:
+  level:
+    root: INFO
+    edu.learning: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile:
+        - docker
+server:
+  port: 8080
+
