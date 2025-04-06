@@ -15,7 +15,7 @@ java {
 
 ext {
     springBootVersion = '3.3.10'
-	springDocVersion = '2.8.5'
+	springDocVersion = '2.4.0'
 }
 
 repositories {
