@@ -16,6 +16,9 @@ java {
 repositories {
 	mavenCentral()
 }
+jar {
+	enabled = false
+}
 
 dependencies {
 	implementation project(':api')

@@ -4,6 +4,8 @@ import edu.learning.api.composite.product.*;
 import edu.learning.api.core.product.ProductDTO;
 import edu.learning.api.core.recommendation.RecommendationDTO;
 import edu.learning.api.core.review.ReviewDTO;
+import edu.learning.api.exceptions.InvalidInputException;
+import edu.learning.api.exceptions.NotFoundException;
 import edu.learning.util.http.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +24,10 @@ public class ProductCompositeServiceImpl implements IProductComposite {
     }
     @Override
     public ProductCompositeDTO getProduct(int productId) {
+
         ProductDTO product = helper.getProduct(productId);
+        if(product==null)
+            throw new NotFoundException("No product found for productId: " + productId);
         List<RecommendationDTO> recommendations = helper.getRecommendations(productId);
         List<ReviewDTO> reviews = helper.getReviews(productId);
         return createProductCompositeDTO(product, recommendations, reviews, serviceUtil.getServiceAddress());
