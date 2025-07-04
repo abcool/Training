@@ -1,6 +1,4 @@
 package edu.learning.util.http;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +10,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import edu.learning.api.exceptions.InvalidInputException;
 import edu.learning.api.exceptions.NotFoundException;
+
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -32,6 +32,13 @@ class GlobalExceptionHandler {
             ServerHttpRequest request, InvalidInputException ex) {
 
         return createHttpErrorDTO(UNPROCESSABLE_ENTITY, request, ex);
+    }
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(RuntimeException.class)
+    public @ResponseBody HttpErrorDTO handleBadRequestException(
+            ServerHttpRequest request, RuntimeException ex) {
+
+        return createHttpErrorDTO(BAD_REQUEST, request, ex);
     }
 
     private HttpErrorDTO createHttpErrorDTO(
