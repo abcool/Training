@@ -1,0 +1,16 @@
+server:
+  error:
+    include-message: ALWAYS
+  port: 8080
+logging:
+  level:
+    root: INFO
+    edu:
+      learning:
+        microservices: DEBUG
+spring:
+  application:
+    name: product-service
+  config:
+    activate:
+      on-profile: docker

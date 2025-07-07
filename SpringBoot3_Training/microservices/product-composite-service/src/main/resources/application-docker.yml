@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  error:
+    include-message: ALWAYS
+spring:
+  application:
+    name: product-composite-service
+  config:
+    activate:
+      on-profile: docker
+logging:
+  level:
+    root: INFO
+    edu:
+      learning:
+        microservices: DEBUG
+app:
+  product-service:
+    host: product-service
+    port: 8080
+  recommendation-service:
+    host: recommendation-service
+    port: 8080
+  review-service:
+    host: review-service
+    port: 8080

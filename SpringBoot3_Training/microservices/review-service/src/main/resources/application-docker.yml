@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  error:
+    include-message: ALWAYS
+
+logging:
+  level:
+    root: INFO
+    edu:
+      learning:
+        microservices: DEBUG
+spring:
+  application:
+    name: review-service
+  config:
+    activate:
+      on-profile: docker

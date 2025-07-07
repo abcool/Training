@@ -6,7 +6,8 @@ logging:
   level:
     root: INFO
     edu:
-      learning: DEBUG
+      learning:
+        microservices: DEBUG
 spring:
   application:
     name: review-service
