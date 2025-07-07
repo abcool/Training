@@ -1,4 +1,4 @@
-package edu.learning.microservices.composite.product;
+package edu.learning.microservices.composite.product.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.learning.api.core.product.IProduct;
@@ -19,7 +19,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;

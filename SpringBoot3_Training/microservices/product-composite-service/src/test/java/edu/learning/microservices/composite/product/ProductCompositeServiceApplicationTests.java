@@ -6,6 +6,7 @@ import edu.learning.api.core.recommendation.RecommendationDTO;
 import edu.learning.api.core.review.ReviewDTO;
 import edu.learning.api.exceptions.InvalidInputException;
 import edu.learning.api.exceptions.NotFoundException;
+import edu.learning.microservices.composite.product.controller.ProductCompositeHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

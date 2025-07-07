@@ -1,10 +1,9 @@
-package edu.learning.microservices.composite.product;
+package edu.learning.microservices.composite.product.controller;
 
 import edu.learning.api.composite.product.*;
 import edu.learning.api.core.product.ProductDTO;
 import edu.learning.api.core.recommendation.RecommendationDTO;
 import edu.learning.api.core.review.ReviewDTO;
-import edu.learning.api.exceptions.InvalidInputException;
 import edu.learning.api.exceptions.NotFoundException;
 import edu.learning.util.http.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
