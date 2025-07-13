@@ -3,11 +3,17 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Product API", description = "Rest API for product information")
 public interface IProduct{
+
+    @PostMapping(
+            value    = "/product",
+            consumes = "application/json",
+            produces = "application/json")
+    ProductDTO createProduct(@RequestBody ProductDTO body);
+
     @Operation(summary = "${api.product.getProduct.description}", description = "${api.product.getProduct.notes}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "${api.product.responseCodes.ok.description}"),
@@ -19,4 +25,7 @@ public interface IProduct{
             value = "/product/{productId}",
             produces = "application/json")
     ProductDTO getProduct(@PathVariable int productId);
+
+    @DeleteMapping(value = "/product/{productId}")
+    void deleteProduct(@PathVariable int productId);
 }
