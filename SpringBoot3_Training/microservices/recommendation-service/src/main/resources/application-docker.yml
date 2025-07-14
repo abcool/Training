@@ -4,6 +4,11 @@ spring:
   config:
     activate:
       on-profile: docker
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: recommendation-db
 server:
   port: 8080
 
@@ -13,6 +18,12 @@ logging:
     edu:
       learning:
         microservices: DEBUG
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
 springdoc:
   swagger-ui:
     path: /openapi/swagger-ui.html
