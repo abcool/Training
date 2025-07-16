@@ -5,10 +5,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 @Tag(name = "Review API", description = "Rest API for product reviews information")
 public interface IReview{
+    @PostMapping(
+            value    = "/review",
+            consumes = "application/json",
+            produces = "application/json")
+    ReviewDTO createReview(@RequestBody ReviewDTO body);
     @Operation(summary = "${api.reviews.getReviews.description}", description = "${api.reviews.getReviews.notes}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "${api.reviews.responseCodes.ok.description}"),
@@ -20,4 +25,7 @@ public interface IReview{
             value = "/review",
             produces = "application/json")
     List<ReviewDTO> getReviews(@RequestParam(value = "productId", required = true) int productId);
+
+    @DeleteMapping(value = "/review")
+    void deleteReviews(@RequestParam(value = "productId", required = true)  int productId);
 }
