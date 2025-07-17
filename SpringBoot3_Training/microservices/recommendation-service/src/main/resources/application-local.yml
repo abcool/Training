@@ -8,9 +8,20 @@ logging:
     edu:
       learning:
         microservices: DEBUG
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
 spring:
   application:
     name: recommendation-service
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: recommendation-db
 springdoc:
   swagger-ui:
     path: /openapi/swagger-ui.html

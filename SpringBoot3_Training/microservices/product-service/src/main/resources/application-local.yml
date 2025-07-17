@@ -1,6 +1,11 @@
 spring:
   application:
     name: product-service
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: product-db
 server:
   port: 7001
 
@@ -10,6 +15,15 @@ logging:
     edu:
       learning:
         microservices: DEBUG
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+        web: DEBUG
+        web.servlet.DispatcherServlet: DEBUG
+        web.filter.CommonsRequestLoggingFilter: DEBUG
 springdoc:
   swagger-ui:
     path: /openapi/swagger-ui.html

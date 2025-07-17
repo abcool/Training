@@ -8,12 +8,23 @@ logging:
     edu:
       learning:
         microservices: DEBUG
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
 spring:
   application:
     name: product-service
   config:
     activate:
       on-profile: docker
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: product-db
 springdoc:
   swagger-ui:
     path: /openapi/swagger-ui.html

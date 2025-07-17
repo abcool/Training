@@ -5,10 +5,17 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 @Tag(name = "Recommendation API", description = "Rest API for product recommendations information")
 public interface IRecommendation {
+
+    @PostMapping(
+            value    = "/recommendation",
+            consumes = "application/json",
+            produces = "application/json")
+    RecommendationDTO createRecommendation(@RequestBody RecommendationDTO body);
+
     @Operation(summary = "${api.recommendations.getRecommendations.description}",description = "${api.recommendations.getRecommendations.notes}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "${api.recommendations.responseCodes.ok.description}"),
@@ -21,4 +28,7 @@ public interface IRecommendation {
             produces = "application/json")
     List<RecommendationDTO> getRecommendations(
             @RequestParam(value = "productId", required = true) int productId);
+
+    @DeleteMapping(value = "/recommendation")
+    void deleteRecommendations(@RequestParam(value = "productId", required = true)  int productId);
 }
