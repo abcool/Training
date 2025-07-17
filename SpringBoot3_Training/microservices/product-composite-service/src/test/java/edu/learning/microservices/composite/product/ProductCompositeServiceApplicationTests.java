@@ -1,6 +1,9 @@
 package edu.learning.microservices.composite.product;
 
 
+import edu.learning.api.composite.product.ProductCompositeDTO;
+import edu.learning.api.composite.product.RecommendationSummaryDTO;
+import edu.learning.api.composite.product.ReviewSummaryDTO;
 import edu.learning.api.core.product.ProductDTO;
 import edu.learning.api.core.recommendation.RecommendationDTO;
 import edu.learning.api.core.review.ReviewDTO;
@@ -13,9 +16,11 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
-
+import reactor.core.publisher.Mono;
+import static org.springframework.http.HttpStatus.*;
 import java.util.Collections;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,6 +49,35 @@ class ProductCompositeServiceApplicationTests {
                 .thenThrow(new NotFoundException(PRODUCT_ID_NOT_FOUND +" not found"));
         Mockito.when(helper.getProduct(PRODUCT_ID_INVALID))
                 .thenThrow(new InvalidInputException("Invalid productId: " + PRODUCT_ID_INVALID));
+    }
+
+    @Test
+    void createCompositeProduct1() {
+
+        ProductCompositeDTO compositeProduct = new ProductCompositeDTO(1, "name", 1, null, null, null);
+
+        createProduct(compositeProduct, OK);
+    }
+
+    @Test
+    void createCompositeProduct2() {
+        ProductCompositeDTO compositeProduct = new ProductCompositeDTO(1, "name", 1,
+                Collections.singletonList(new RecommendationSummaryDTO(1, "a", 1, "c")),
+                Collections.singletonList(new ReviewSummaryDTO(1, "a", "s", "c")), null);
+
+        createProduct(compositeProduct, OK);
+    }
+
+    @Test
+    void deleteCompositeProduct() {
+        ProductCompositeDTO compositeProduct = new ProductCompositeDTO(1, "name", 1,
+                Collections.singletonList(new RecommendationSummaryDTO(1, "a", 1, "c")),
+                Collections.singletonList(new ReviewSummaryDTO(1, "a", "s", "c")), null);
+
+        createProduct(compositeProduct, OK);
+
+        deleteProduct(compositeProduct.productId(), OK);
+        deleteProduct(compositeProduct.productId(), OK);
     }
     @Test
     public void getProductById(){
@@ -74,5 +108,20 @@ class ProductCompositeServiceApplicationTests {
                 .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Invalid productId: " + PRODUCT_ID_INVALID);
+    }
+
+    private void createProduct(ProductCompositeDTO compositeProduct, HttpStatus expectedStatus) {
+        testClient.post()
+                .uri("/product-composite")
+                .body(Mono.just(compositeProduct), ProductCompositeDTO.class)
+                .exchange()
+                .expectStatus().isEqualTo(expectedStatus);
+    }
+
+    private void deleteProduct(int productId, HttpStatus expectedStatus) {
+        testClient.delete()
+                .uri("/product-composite/" + productId)
+                .exchange()
+                .expectStatus().isEqualTo(expectedStatus);
     }
 }

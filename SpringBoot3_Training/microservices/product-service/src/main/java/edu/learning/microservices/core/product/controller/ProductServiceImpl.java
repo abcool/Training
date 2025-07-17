@@ -29,6 +29,7 @@ public class ProductServiceImpl implements IProduct {
     }
     @Override
     public ProductDTO createProduct(ProductDTO body) {
+        LOGGER.debug("Create product: Received request payload: "+ body);
         try {
             ProductEntity entity = mapper.dtoToEntity(body);
             ProductEntity newEntity = repository.save(entity);
