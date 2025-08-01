@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 public record EmailRequest(@Email @NotEmpty String email, @NotEmpty String subject,
-                           @NotEmpty String body, @NotNull LocalDateTime dateTime,
-                           @NotNull @FutureOrPresent(message = "Please mention a date in present or future") ZoneId timeZone) {}
+                           @NotEmpty String body, @NotNull @FutureOrPresent(message = "Please mention a date in present or future") LocalDateTime dateTime,
+                           @NotNull ZoneId timeZone) {}
