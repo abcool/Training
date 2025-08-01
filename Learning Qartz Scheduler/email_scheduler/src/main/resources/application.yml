@@ -1,0 +1,41 @@
+# Spring datasource configuration for a PostgreSQL database
+logging:
+  level:
+    org:
+      springframework:
+        boot: debug
+spring:
+  application:
+    name: email scheduler
+  datasource:
+    url: jdbc:postgresql://localhost:5432/qartz_demo
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+# Quartz configuration for scheduling jobs
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org:
+        quart:
+          threadPool:
+            threadCount: 5
+
+# Mail server configuration
+  mail:
+    host: smtp.freesmtpservers.com
+    port: 25
+    username: test@smtp.org
+    password:
+    properties:
+        mail:
+            smtp:
+              auth: false
+org:
+  quartz:
+    jobStore:
+      driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
