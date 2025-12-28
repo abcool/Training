@@ -33,6 +33,8 @@ dependencies {
 	implementation project(':api')
 	implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
 	implementation "org.springframework:spring-web"
+	compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation "org.springframework:spring-context"
 	compileOnly("org.projectlombok:lombok:${lombokVersion}")
 	annotationProcessor("org.projectlombok:lombok:${lombokVersion}")

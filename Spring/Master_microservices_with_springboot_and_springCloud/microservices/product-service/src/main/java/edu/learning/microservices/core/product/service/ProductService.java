@@ -8,6 +8,8 @@ import edu.learning.util.http.ServiceUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,7 +25,7 @@ public class ProductService implements IProduct {
     }
 
     @Override
-    public ProductDTO getProduct(Integer productId) {
+    public ResponseEntity<ProductDTO> getProduct(Integer productId) {
         if (productId < 1) {
             throw new InvalidInputException("Invalid productId: " + productId);
         }
@@ -31,6 +33,7 @@ public class ProductService implements IProduct {
         if (productId == 13) {
             throw new NotFoundException("No product found for productId: " + productId);
         }
-        return new ProductDTO(productId, "name-" + productId, 123, serviceUtil.getServiceAddress());
+        var product = new ProductDTO(productId, "name-" + productId, 123, serviceUtil.getServiceAddress());
+        return new ResponseEntity<ProductDTO>(product, HttpStatus.OK);
     }
 }

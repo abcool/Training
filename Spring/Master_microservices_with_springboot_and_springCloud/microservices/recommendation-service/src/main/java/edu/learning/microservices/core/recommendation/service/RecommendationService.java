@@ -7,6 +7,8 @@ import edu.learning.util.http.ServiceUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
@@ -22,7 +24,7 @@ public class RecommendationService implements IRecommendation {
     }
 
     @Override
-    public List<RecommendationDTO> getRecommendations(int productId) {
+    public ResponseEntity<List<RecommendationDTO>> getRecommendations(int productId) {
 
         if (productId < 1) {
             throw new InvalidInputException("Invalid productId: " + productId);
@@ -30,7 +32,7 @@ public class RecommendationService implements IRecommendation {
 
         if (productId == 113) {
             log.debug("No recommendations found for productId: {}", productId);
-            return Collections.emptyList();
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
 
         var recommendations = new ArrayList<RecommendationDTO>();
@@ -39,6 +41,6 @@ public class RecommendationService implements IRecommendation {
         recommendations.add(new RecommendationDTO(productId, 2, "Author 2", 2, "Content 2", serviceUtil.getServiceAddress()));
         recommendations.add(new RecommendationDTO(productId, 3, "Author 3", 3, "Content 3", serviceUtil.getServiceAddress()));
 
-        return recommendations;
+        return new ResponseEntity<>(recommendations, HttpStatus.OK);
     }
 }
