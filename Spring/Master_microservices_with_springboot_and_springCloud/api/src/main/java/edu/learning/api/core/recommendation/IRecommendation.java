@@ -1,0 +1,17 @@
+package edu.learning.api.core.recommendation;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+
+public interface IRecommendation {
+
+    @GetMapping(
+            value = "/recommendation",
+            produces = "application/json")
+    ResponseEntity<List<RecommendationDTO>> getRecommendations(
+            @RequestParam(name = "productId", required = true) int productId);
+
+}

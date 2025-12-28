@@ -1,0 +1,49 @@
+plugins {
+	id 'java'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'edu.learning.util'
+version = '1.0.0-SNAPSHOT'
+description = 'Demo project for Spring Boot'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	springBootVersion = '3.5.9'
+	lombokVersion = '1.18.32'
+	log4jVersion= '2.25.3'
+}
+
+dependencies {
+	implementation project(':api')
+	implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+	implementation "org.springframework:spring-web"
+	compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation "org.springframework:spring-context"
+	compileOnly("org.projectlombok:lombok:${lombokVersion}")
+	annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+	implementation ("org.apache.logging.log4j:log4j-core:${log4jVersion}")
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

@@ -1,0 +1,71 @@
+Step 1: Run PostgreSQL in Docker
+
+docker run --name my-postgres \
+  -e POSTGRES_USER=user \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_DB=qartz_demo \
+  -p 5432:5432 \
+  -d postgres:17
+
+Step 2: Verify PostgreSQL Container Is Running
+
+docker ps
+
+Step 3: Connect to PostgreSQL
+
+In the connection settings:
+
+Host: localhost
+
+Port: 5432
+
+User: admin
+
+Password: admin123
+
+Database: qartz_demo
+
+
+Step 5: Tests connection
+
+docker exec -it my-postgres psql -U user -d qartz_demo
+
+show databases-> \list
+
+use database-> \c qartz_demo
+
+show tables -> \dt
+
+Step 6: Copy the SQL file into the container:
+docker cp '/Users/abcool/Github/Training/Learning Qartz Scheduler/email_scheduler/qartz_init.sql' my-postgres:/qartz_init.sql
+
+Step 7: Enter the psql shell:
+docker exec -it my-postgres psql -U user -d qartz_demo
+
+
+Step 8: Run the script inside psql:
+\i /qartz_init.sql
+
+
+
+
+Step 9: (Optional) Use Docker Compose
+
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: my-postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
