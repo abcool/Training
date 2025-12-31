@@ -10,6 +10,9 @@ import edu.learning.api.core.recommendation.RecommendationDTO;
 import edu.learning.api.core.review.ReviewDTO;
 import edu.learning.api.exceptions.InvalidInputException;
 import edu.learning.api.exceptions.NotFoundException;
+import edu.learning.microservices.composite.product.client.ProductServiceClient;
+import edu.learning.microservices.composite.product.client.RecommendationServiceClient;
+import edu.learning.microservices.composite.product.client.ReviewServiceClient;
 import edu.learning.microservices.composite.product.integration.ProductCompositeIntegration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono; // Import Mono
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class ProductCompositeServiceApplicationTests {
@@ -26,28 +30,38 @@ class ProductCompositeServiceApplicationTests {
     private static final int PRODUCT_ID_NOT_FOUND = 2;
     private static final int PRODUCT_ID_INVALID = 3;
 
-    @Autowired private WebTestClient client;
+    @Autowired
+    private WebTestClient client;
     @MockitoBean
     private ProductCompositeIntegration compositeIntegration;
+
+    @MockitoBean
+    private ProductServiceClient productServiceClient;
+
+    @MockitoBean
+    private RecommendationServiceClient recommendationServiceClient;
+
+    @MockitoBean
+    private ReviewServiceClient reviewServiceClient;
 
     @BeforeEach
     void setUp() {
         when(compositeIntegration.getProduct(PRODUCT_ID_OK))
-                .thenReturn(ResponseEntity.ok(new ProductDTO(PRODUCT_ID_OK, "name", 1, "mock-address")));
+                .thenReturn(Mono.just(ResponseEntity.ok(new ProductDTO(PRODUCT_ID_OK, "name", 1, "mock-address"))));
         when(compositeIntegration.getRecommendations(PRODUCT_ID_OK))
-                .thenReturn(ResponseEntity.ok(singletonList(
+                .thenReturn(Mono.just(ResponseEntity.ok(singletonList(
                         new RecommendationDTO(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address")
-                )));
+                ))));
         when(compositeIntegration.getReviews(PRODUCT_ID_OK))
-                .thenReturn(ResponseEntity.ok(singletonList(
+                .thenReturn(Mono.just(ResponseEntity.ok(singletonList(
                         new ReviewDTO(PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address")
-                )));
+                ))));
 
         when(compositeIntegration.getProduct(PRODUCT_ID_NOT_FOUND))
-                .thenThrow(new NotFoundException("NOT FOUND: " + PRODUCT_ID_NOT_FOUND));
+                .thenReturn(Mono.error(new NotFoundException("NOT FOUND: " + PRODUCT_ID_NOT_FOUND)));
 
         when(compositeIntegration.getProduct(PRODUCT_ID_INVALID))
-                .thenThrow(new InvalidInputException("INVALID: " + PRODUCT_ID_INVALID));
+                .thenReturn(Mono.error(new InvalidInputException("INVALID: " + PRODUCT_ID_INVALID)));
     }
 
     @Test

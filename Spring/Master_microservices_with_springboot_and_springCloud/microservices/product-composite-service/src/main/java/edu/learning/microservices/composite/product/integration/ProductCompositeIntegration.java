@@ -20,10 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -47,12 +46,12 @@ public class ProductCompositeIntegration implements IProduct, IRecommendation, I
      * @return
      */
     @Override
-    public ResponseEntity<ProductDTO> getProduct(Integer productId) {
+    public Mono<ResponseEntity<ProductDTO>> getProduct(Integer productId) {
         log.debug("Calling product-service to get product details");
         try {
-            ProductDTO product = productClient.getProduct(productId);
+            Mono<ResponseEntity<ProductDTO>> product = productClient.getProduct(productId);
             log.info("Product details received: {}", product);
-            return new ResponseEntity<ProductDTO>(product,HttpStatus.OK);
+            return product;
         } catch (feign.FeignException e) {
             HttpStatus status = HttpStatus.resolve(e.status());
             switch (status){
@@ -68,12 +67,12 @@ public class ProductCompositeIntegration implements IProduct, IRecommendation, I
      * @return
      */
     @Override
-    public ResponseEntity<List<RecommendationDTO>> getRecommendations(int productId) {
+    public Mono<ResponseEntity<List<RecommendationDTO>>> getRecommendations(int productId) {
         log.info("Calling recommendation-service to fetch recommendations for product: {}",productId);
         try {
-            List<RecommendationDTO> recommendations = recommendationClient.getRecommendations(productId);
+            Mono<ResponseEntity<List<RecommendationDTO>>> recommendations = recommendationClient.getRecommendations(productId);
             log.debug("Recommendations received for product: {} are {}", productId, recommendations);
-            return new ResponseEntity<>(recommendations, HttpStatus.OK);
+            return recommendations;
         }catch (feign.FeignException e) {
             HttpStatus status = HttpStatus.resolve(e.status());
             switch (status){
@@ -89,12 +88,12 @@ public class ProductCompositeIntegration implements IProduct, IRecommendation, I
      * @return
      */
     @Override
-    public ResponseEntity<List<ReviewDTO>> getReviews(int productId) {
+    public Mono<ResponseEntity<List<ReviewDTO>>> getReviews(int productId) {
         log.info("Calling review service to fetch review for product: {}", productId);
         try {
-            List<ReviewDTO> reviews = reviewClient.getReviews(productId);
+            Mono<ResponseEntity<List<ReviewDTO>>> reviews = reviewClient.getReviews(productId);
             log.debug("Reviews received for product: {} are {}", productId, reviews);
-            return new ResponseEntity<>(reviews, HttpStatus.OK);
+            return reviews;
         }catch (feign.FeignException e) {
             HttpStatus status = HttpStatus.resolve(e.status());
             switch (status){
@@ -105,13 +104,6 @@ public class ProductCompositeIntegration implements IProduct, IRecommendation, I
         }
     }
 
-//    private String getErrorMessage(FeignException ex) {
-//        try {
-//            return mapper.readValue(ex.getMessage(), HttpErrorInfo.class).getMessage();
-//        } catch (IOException ioex) {
-//            return ex.getMessage();
-//        }
-//    }
 private String getErrorMessage(FeignException ex) {
     String content = ex.contentUTF8();
     if (content == null || content.isBlank()) {

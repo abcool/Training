@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,14 +27,14 @@ public class ReviewService implements IReview {
     }
 
     @Override
-    public ResponseEntity<List<ReviewDTO>> getReviews(int productId) {
+    public Mono<ResponseEntity<List<ReviewDTO>>> getReviews(int productId) {
         if (productId < 1) {
             throw new InvalidInputException("Invalid productId: " + productId);
         }
 
         if (productId == 213) {
             log.debug("No reviews found for productId: {}", productId);
-            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
+            return Mono.just(new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND));
         }
         var reviews = new ArrayList<ReviewDTO>();
 
@@ -41,6 +42,6 @@ public class ReviewService implements IReview {
         reviews.add(new ReviewDTO(productId, 2, "Author 2", "Subject 2", "Content 2", serviceUtil.getServiceAddress()));
         reviews.add(new ReviewDTO(productId, 3, "Author 3", "Subject 3", "Content 3", serviceUtil.getServiceAddress()));
 
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
+        return Mono.just(new ResponseEntity<>(reviews, HttpStatus.OK));
     }
 }

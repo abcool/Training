@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class ProductService implements IProduct {
@@ -25,15 +26,15 @@ public class ProductService implements IProduct {
     }
 
     @Override
-    public ResponseEntity<ProductDTO> getProduct(Integer productId) {
+    public Mono<ResponseEntity<ProductDTO>> getProduct(Integer productId) {
         if (productId < 1) {
-            throw new InvalidInputException("Invalid productId: " + productId);
+            return Mono.error(new InvalidInputException("Invalid productId: " + productId));
         }
 
         if (productId == 13) {
-            throw new NotFoundException("No product found for productId: " + productId);
+            return Mono.error(new NotFoundException("No product found for productId: " + productId));
         }
         var product = new ProductDTO(productId, "name-" + productId, 123, serviceUtil.getServiceAddress());
-        return new ResponseEntity<ProductDTO>(product, HttpStatus.OK);
+        return Mono.just(new ResponseEntity<ProductDTO>(product, HttpStatus.OK));
     }
 }

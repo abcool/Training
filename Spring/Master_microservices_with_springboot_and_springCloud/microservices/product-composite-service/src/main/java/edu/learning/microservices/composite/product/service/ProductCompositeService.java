@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,13 +39,13 @@ public class ProductCompositeService implements IProductComposite {
      * @return
      */
     @Override
-    public ResponseEntity<ProductCompositeDTO> getCompositeProduct(int productId) {
+    public Mono<ResponseEntity<ProductCompositeDTO>> getCompositeProduct(int productId) {
         log.info("Fetching details for product: {}", productId);
-        ProductDTO product = integration.getProduct(productId).getBody();
+        ProductDTO product = integration.getProduct(productId).block().getBody();
         if(Objects.isNull(product)) throw new NotFoundException("No product found for productId: " + productId);
-        var recommendations = integration.getRecommendations(productId).getBody();
-        var reviews = integration.getReviews(productId).getBody();
-        return new ResponseEntity<>(createCompositeProduct(product,recommendations,reviews, serviceUtil.getServiceAddress()), HttpStatus.OK);
+        var recommendations = integration.getRecommendations(productId).block().getBody();
+        var reviews = integration.getReviews(productId).block().getBody();
+        return Mono.just(new ResponseEntity<>(createCompositeProduct(product,recommendations,reviews, serviceUtil.getServiceAddress()), HttpStatus.OK));
     }
 
     private ProductCompositeDTO createCompositeProduct(ProductDTO product, List<RecommendationDTO> recommendations, List<ReviewDTO> reviews, String serviceAddress) {
