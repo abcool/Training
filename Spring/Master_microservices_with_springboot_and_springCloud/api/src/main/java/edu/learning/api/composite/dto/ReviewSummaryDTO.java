@@ -2,9 +2,11 @@ package edu.learning.api.composite.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
+@ToString
 public class ReviewSummaryDTO {
 
     private final int reviewId;

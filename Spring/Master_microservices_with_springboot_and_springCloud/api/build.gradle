@@ -1,6 +1,5 @@
 plugins {
-	id 'java'
-	id 'io.spring.dependency-management' version '1.1.7'
+	id 'java-library'
 }
 
 group = 'edu.learning.api'
@@ -13,30 +12,38 @@ java {
 	}
 }
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
-
 repositories {
 	mavenCentral()
 }
 
 ext {
-	springBootVersion = '3.5.9'
+	reactorVersion = '3.6.5'
+	springVersion = '6.0.17'
+	jacksonVersion = '2.17.1'
+	validationVersion = '3.0.2'
 	lombokVersion = '1.18.32'
+	openAPIVersion = '2.8.7'
 }
 dependencies {
-	implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-	implementation "org.springframework:spring-web"
-	compileOnly("org.projectlombok:lombok:${lombokVersion}")
-	annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
+	// Reactive primitives
+	api ("io.projectreactor:reactor-core:${reactorVersion}")
 
-tasks.named('test') {
-	useJUnitPlatform()
+	// Reactive web annotations (no server)
+	api ("org.springframework:spring-web:${springVersion}")
+
+	// JSON annotations on DTOs
+	api ("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
+
+	// Validation annotations if used
+	api ("jakarta.validation:jakarta.validation-api:${validationVersion}")
+
+	api ("org.springdoc:springdoc-openapi-starter-common:${openAPIVersion}")
+
+	// Lombok (compile-time only)
+	compileOnly ("org.projectlombok:lombok:${lombokVersion}")
+	annotationProcessor ("org.projectlombok:lombok:${lombokVersion}")
+}
+configurations.all {
+	exclude group: 'org.springframework.boot', module: 'spring-boot-autoconfigure'
+	exclude group: 'org.springframework.boot', module: 'spring-boot-starter-json'
 }

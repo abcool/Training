@@ -14,12 +14,11 @@ import edu.learning.util.http.ServiceUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 public class ProductCompositeService implements IProductComposite {
@@ -38,22 +37,48 @@ public class ProductCompositeService implements IProductComposite {
      * @return
      */
     @Override
-    public ResponseEntity<ProductCompositeDTO> getCompositeProduct(int productId) {
+    public Mono<ResponseEntity<ProductCompositeDTO>> getCompositeProduct(int productId) {
         log.info("Fetching details for product: {}", productId);
-        ProductDTO product = integration.getProduct(productId).getBody();
-        if(Objects.isNull(product)) throw new NotFoundException("No product found for productId: " + productId);
-        var recommendations = integration.getRecommendations(productId).getBody();
-        var reviews = integration.getReviews(productId).getBody();
-        return new ResponseEntity<>(createCompositeProduct(product,recommendations,reviews, serviceUtil.getServiceAddress()), HttpStatus.OK);
+
+        return integration.getProduct(productId)
+                .flatMap(productResponse -> {
+                    ProductDTO product = productResponse.getBody();
+                    if (product == null) {
+                        return Mono.error(new NotFoundException("No product found for productId: " + productId));
+                    }
+
+                    // Execute recommendations and reviews in parallel
+                    Mono<List<RecommendationDTO>> recommendationsMono = integration.getRecommendations(productId)
+                            .map(ResponseEntity::getBody)
+                            .defaultIfEmpty(List.of());
+
+                    Mono<List<ReviewDTO>> reviewsMono = integration.getReviews(productId)
+                            .map(ResponseEntity::getBody)
+                            .defaultIfEmpty(List.of());
+
+                    // Combine results using Mono.zip for parallel execution
+                    return Mono.zip(recommendationsMono, reviewsMono)
+                            .map(tuple -> {
+                                List<RecommendationDTO> recommendations = tuple.getT1();
+                                List<ReviewDTO> reviews = tuple.getT2();
+                                return createCompositeProduct(
+                                        product,
+                                        recommendations,
+                                        reviews,
+                                        serviceUtil.getServiceAddress()
+                                );
+                            });
+                })
+                .map(ResponseEntity::ok);
     }
 
     private ProductCompositeDTO createCompositeProduct(ProductDTO product, List<RecommendationDTO> recommendations, List<ReviewDTO> reviews, String serviceAddress) {
         var recommendationSummaryDTO = recommendations.stream().
                 map(recommendation ->
-                    new RecommendationSummaryDTO(
-                            recommendation.getRecommendationId(),
-                            recommendation.getAuthor(),
-                            recommendation.getRate()))
+                        new RecommendationSummaryDTO(
+                                recommendation.getRecommendationId(),
+                                recommendation.getAuthor(),
+                                recommendation.getRate()))
                 .toList();
         var reviewSummaryDTO = reviews.stream()
                 .map(review -> new ReviewSummaryDTO(
@@ -63,8 +88,8 @@ public class ProductCompositeService implements IProductComposite {
                 ))
                 .toList();
         var productAddress = product.getServiceAddress();
-        var reviewAddress = reviews.size()>0?reviews.get(0).getServiceAddress():"";
-        var recommendationAddress = recommendations.size()>0?recommendations.get(0).getServiceAddress():"";
+        var reviewAddress = reviews.isEmpty() ? "" : reviews.get(0).getServiceAddress();
+        var recommendationAddress = recommendations.isEmpty() ? "" : recommendations.get(0).getServiceAddress();
         var compositeServiceAddress = new ServiceAddressesDTO(serviceAddress, productAddress,reviewAddress,recommendationAddress);
         return new ProductCompositeDTO(product.getProductId(),product.getName(),product.getWeight(),recommendationSummaryDTO, reviewSummaryDTO,compositeServiceAddress);
     }

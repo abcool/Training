@@ -2,9 +2,11 @@ package edu.learning.api.core.recommendation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
+@ToString
 public class RecommendationDTO {
     private final int productId;
     private final int recommendationId;

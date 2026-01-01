@@ -2,9 +2,11 @@ package edu.learning.api.core.review;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
+@ToString
 public class ReviewDTO {
     private final int productId;
     private final int reviewId;

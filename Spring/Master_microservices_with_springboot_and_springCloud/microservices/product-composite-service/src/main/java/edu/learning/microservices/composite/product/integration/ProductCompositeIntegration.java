@@ -20,10 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -35,97 +34,71 @@ public class ProductCompositeIntegration implements IProduct, IRecommendation, I
     private final ObjectMapper mapper;
 
     @Autowired
-    public ProductCompositeIntegration(ProductServiceClient productClient, ObjectMapper mapper, RecommendationServiceClient recommendationClient, ReviewServiceClient reviewClient){
-        this.productClient=productClient;
-        this.mapper=mapper;
-        this.recommendationClient=recommendationClient;
-        this.reviewClient=reviewClient;
+    public ProductCompositeIntegration(ProductServiceClient productClient, ObjectMapper mapper,
+                                       RecommendationServiceClient recommendationClient,
+                                       ReviewServiceClient reviewClient) {
+        this.productClient = productClient;
+        this.mapper = mapper;
+        this.recommendationClient = recommendationClient;
+        this.reviewClient = reviewClient;
     }
 
-    /**
-     * @param productId
-     * @return
-     */
     @Override
-    public ResponseEntity<ProductDTO> getProduct(Integer productId) {
+    public Mono<ResponseEntity<ProductDTO>> getProduct(Integer productId) {
         log.debug("Calling product-service to get product details");
-        try {
-            ProductDTO product = productClient.getProduct(productId);
-            log.info("Product details received: {}", product);
-            return new ResponseEntity<ProductDTO>(product,HttpStatus.OK);
-        } catch (feign.FeignException e) {
-            HttpStatus status = HttpStatus.resolve(e.status());
-            switch (status){
-                case NOT_FOUND -> throw new NotFoundException(getErrorMessage(e));
-                case UNPROCESSABLE_ENTITY -> throw new InvalidInputException(getErrorMessage(e));
-                default -> {log.error("Unexpected error occured: {} ",e.getMessage()); throw e;}
-            }
-        }
+        return productClient.getProduct(productId)
+                .doOnNext(product -> log.info("Product details received: {}", product))
+                .map(ResponseEntity::ok)
+                .onErrorResume(FeignException.class, this::handleFeignException);
     }
 
-    /**
-     * @param productId
-     * @return
-     */
     @Override
-    public ResponseEntity<List<RecommendationDTO>> getRecommendations(int productId) {
-        log.info("Calling recommendation-service to fetch recommendations for product: {}",productId);
-        try {
-            List<RecommendationDTO> recommendations = recommendationClient.getRecommendations(productId);
-            log.debug("Recommendations received for product: {} are {}", productId, recommendations);
-            return new ResponseEntity<>(recommendations, HttpStatus.OK);
-        }catch (feign.FeignException e) {
-            HttpStatus status = HttpStatus.resolve(e.status());
-            switch (status){
-                case NOT_FOUND -> throw new NotFoundException(getErrorMessage(e));
-                case UNPROCESSABLE_ENTITY -> throw new InvalidInputException(getErrorMessage(e));
-                default -> {log.error("Unexpected error occured: {} ",e.getMessage()); throw e;}
-            }
-        }
+    public Mono<ResponseEntity<List<RecommendationDTO>>> getRecommendations(int productId) {
+        log.info("Calling recommendation-service to fetch recommendations for product: {}", productId);
+        return recommendationClient.getRecommendations(productId)
+                .doOnNext(recommendations -> log.debug("Recommendations received for product: {} are {}", productId, recommendations))
+                .map(ResponseEntity::ok)
+                .onErrorResume(FeignException.class, this::handleFeignException);
     }
 
-    /**
-     * @param productId
-     * @return
-     */
     @Override
-    public ResponseEntity<List<ReviewDTO>> getReviews(int productId) {
+    public Mono<ResponseEntity<List<ReviewDTO>>> getReviews(int productId) {
         log.info("Calling review service to fetch review for product: {}", productId);
-        try {
-            List<ReviewDTO> reviews = reviewClient.getReviews(productId);
-            log.debug("Reviews received for product: {} are {}", productId, reviews);
-            return new ResponseEntity<>(reviews, HttpStatus.OK);
-        }catch (feign.FeignException e) {
-            HttpStatus status = HttpStatus.resolve(e.status());
-            switch (status){
-                case NOT_FOUND -> throw new NotFoundException(getErrorMessage(e));
-                case UNPROCESSABLE_ENTITY -> throw new InvalidInputException(getErrorMessage(e));
-                default -> {log.error("Unexpected error occured: {} ",e.getMessage()); throw e;}
+        return reviewClient.getReviews(productId)
+                .doOnNext(reviews -> log.debug("Reviews received for product: {} are {}", productId, reviews))
+                .map(ResponseEntity::ok)
+                .onErrorResume(FeignException.class, this::handleFeignException);
+    }
+
+    private <T> Mono<T> handleFeignException(FeignException e) {
+        HttpStatus status = HttpStatus.resolve(e.status());
+        if (status == null) {
+            log.error("Unknown HTTP status code: {}", e.status());
+            return Mono.error(e);
+        }
+
+        return switch (status) {
+            case NOT_FOUND -> Mono.error(new NotFoundException(getErrorMessage(e)));
+            case UNPROCESSABLE_ENTITY -> Mono.error(new InvalidInputException(getErrorMessage(e)));
+            default -> {
+                log.error("Unexpected error occurred: {}", e.getMessage());
+                yield Mono.error(e);
             }
+        };
+    }
+
+    private String getErrorMessage(FeignException ex) {
+        String content = ex.contentUTF8();
+        if (content == null || content.isBlank()) {
+            return ex.getMessage() != null ? ex.getMessage() : "Unknown error";
+        }
+
+        try {
+            HttpErrorInfo errorInfo = mapper.readValue(content, HttpErrorInfo.class);
+            String msg = errorInfo.getMessage();
+            return (msg != null && !msg.isBlank()) ? msg : (ex.getMessage() != null ? ex.getMessage() : content);
+        } catch (IOException ioex) {
+            return !content.isBlank() ? content : (ex.getMessage() != null ? ex.getMessage() : "Unknown error");
         }
     }
-
-//    private String getErrorMessage(FeignException ex) {
-//        try {
-//            return mapper.readValue(ex.getMessage(), HttpErrorInfo.class).getMessage();
-//        } catch (IOException ioex) {
-//            return ex.getMessage();
-//        }
-//    }
-private String getErrorMessage(FeignException ex) {
-    String content = ex.contentUTF8();
-    if (content == null || content.isBlank()) {
-        return ex.getMessage() != null ? ex.getMessage() : "Unknown error";
-    }
-    try {
-        HttpErrorInfo errorInfo = mapper.readValue(content, HttpErrorInfo.class);
-        String msg = errorInfo.getMessage();
-        return (msg != null && !msg.isBlank()) ? msg : (ex.getMessage() != null ? ex.getMessage() : content);
-    } catch (IOException ioex) {
-        return !content.isBlank() ? content : (ex.getMessage() != null ? ex.getMessage() : "Unknown error");
-    }
-}
-
-
-
 }
