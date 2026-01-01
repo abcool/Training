@@ -18,13 +18,16 @@ repositories {
 	mavenCentral()
 }
 ext{
-	OpenFeignVersion = '3.2.10'
+	OpenFeignVersion = '4.2.1'
 	springBootVersion = '3.5.9'
+	springCloudVersion = '2025.0.1'
+	openAPIVersion = '2.8.7'
 }
 
 dependencyManagement {
 	imports {
-		mavenBom ("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+		mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")  // Add this
 	}
 }
 dependencies {
@@ -49,6 +52,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation ("com.playtika.reactivefeign:feign-reactor-spring-cloud-starter:${OpenFeignVersion}")
+	implementation ("org.springdoc:springdoc-openapi-starter-webflux-ui:${openAPIVersion}")
 	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'

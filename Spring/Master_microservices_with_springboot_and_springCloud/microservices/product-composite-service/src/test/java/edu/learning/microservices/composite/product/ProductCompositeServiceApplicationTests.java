@@ -10,9 +10,6 @@ import edu.learning.api.core.recommendation.RecommendationDTO;
 import edu.learning.api.core.review.ReviewDTO;
 import edu.learning.api.exceptions.InvalidInputException;
 import edu.learning.api.exceptions.NotFoundException;
-import edu.learning.microservices.composite.product.client.ProductServiceClient;
-import edu.learning.microservices.composite.product.client.RecommendationServiceClient;
-import edu.learning.microservices.composite.product.client.ReviewServiceClient;
 import edu.learning.microservices.composite.product.integration.ProductCompositeIntegration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,15 +31,6 @@ class ProductCompositeServiceApplicationTests {
     private WebTestClient client;
     @MockitoBean
     private ProductCompositeIntegration compositeIntegration;
-
-    @MockitoBean
-    private ProductServiceClient productServiceClient;
-
-    @MockitoBean
-    private RecommendationServiceClient recommendationServiceClient;
-
-    @MockitoBean
-    private ReviewServiceClient reviewServiceClient;
 
     @BeforeEach
     void setUp() {

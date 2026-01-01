@@ -13,5 +13,5 @@ import java.util.List;
 public interface RecommendationServiceClient {
 
     @GetMapping(path = "/recommendation")
-    Mono<ResponseEntity<List<RecommendationDTO>>> getRecommendations(@RequestParam(name = "productId") int productId);
+    Mono<List<RecommendationDTO>> getRecommendations(@RequestParam(name = "productId") int productId);
 }

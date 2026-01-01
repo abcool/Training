@@ -13,6 +13,6 @@ import java.util.List;
 public interface ReviewServiceClient {
 
     @GetMapping(path = "/review")
-    Mono<ResponseEntity<List<ReviewDTO>>> getReviews(@RequestParam(name = "productId") int productId);
+    Mono<List<ReviewDTO>> getReviews(@RequestParam(name = "productId") int productId);
 
 }

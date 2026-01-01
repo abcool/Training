@@ -11,6 +11,6 @@ import reactor.core.publisher.Mono;
 public interface ProductServiceClient {
 
     @GetMapping(path = "/product/{productId}")
-    Mono<ResponseEntity<ProductDTO>> getProduct(@PathVariable(name = "productId") int productId);
+    Mono<ProductDTO> getProduct(@PathVariable(name = "productId") int productId);
 
 }
