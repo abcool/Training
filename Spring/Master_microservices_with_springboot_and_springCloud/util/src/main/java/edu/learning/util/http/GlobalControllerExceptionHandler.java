@@ -4,7 +4,6 @@ import edu.learning.api.exceptions.InvalidInputException;
 import edu.learning.api.exceptions.NotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-//import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.time.ZonedDateTime;
 
 @ControllerAdvice
-//@ConditionalOnClass(ServerHttpRequest.class)
 public class GlobalControllerExceptionHandler {
 
     private static final Logger log = LogManager.getLogger(GlobalControllerExceptionHandler.class);
