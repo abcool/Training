@@ -9,7 +9,6 @@ import edu.learning.api.core.recommendation.RecommendationDTO;
 import edu.learning.microservices.core.recommendation.persistence.RecommendationEntity;
 import edu.learning.util.http.ServiceUtil;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
