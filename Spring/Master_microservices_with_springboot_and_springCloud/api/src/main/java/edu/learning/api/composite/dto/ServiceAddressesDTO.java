@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @ToString
 public class ServiceAddressesDTO {
-    private final String cmp;
-    private final String pro;
-    private final String rev;
-    private final String rec;
+    private String cmp;
+    private String pro;
+    private String rev;
+    private String rec;
 }

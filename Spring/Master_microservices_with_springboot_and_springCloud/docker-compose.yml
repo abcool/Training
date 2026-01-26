@@ -6,23 +6,98 @@ services:
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_URI=mongodb://admin:password@mongodb:27017/product-db?authSource=admin
+    networks:
+      - app-net       # To talk to Composite Service
+      - mongo-net     # To talk to MongoDB
+    depends_on:
+      mongodb:
+        condition: service_healthy
 
   recommendation-service:
     build: microservices/recommendation-service
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_URI=mongodb://admin:password@mongodb:27017/recommendation-db?authSource=admin
+    networks:
+      - app-net
+      - mongo-net
+    depends_on:
+      mongodb:
+        condition: service_healthy
 
   review-service:
     build: microservices/review-service
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      # Changed to R2DBC as established in previous turns
+      - SPRING_R2DBC_URL=r2dbc:mysql://mysql:3306/review-db
+      - SPRING_R2DBC_USERNAME=user
+      - SPRING_R2DBC_PASSWORD=password
+      # Ensures schema.sql runs (if present in classpath)
+      - SPRING_SQL_INIT_MODE=always
+    networks:
+      - app-net
+      - mysql-net     # To talk to MySQL
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   product-composite-service:
     build: microservices/product-composite-service
     mem_limit: 512m
     ports:
       - "8080:8080"
+      - "5005:5005"   # <--- 1. Expose the debug port
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      # 2. Enable Debugging (Listen on all interfaces *)
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    networks:
+      - app-net       # Can only see other services, NOT databases directly
+    depends_on:
+      - product-service
+      - recommendation-service
+      - review-service
+
+  mongodb:
+    image: mongo:6.0.27
+    mem_limit: 512m
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    command: mongod
+    networks:
+      - mongo-net
+    healthcheck:
+      test: "mongosh -u admin -p password --authenticationDatabase admin --eval 'db.adminCommand(\"ping\")'"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mysql:
+    image: mysql:8.4
+    mem_limit: 512m
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpwd
+      - MYSQL_DATABASE=review-db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    networks:
+      - mysql-net
+    healthcheck:
+      test: "mysqladmin ping -u user -ppassword"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+networks:
+  app-net:
+  mongo-net:
+  mysql-net:

@@ -14,8 +14,10 @@ import edu.learning.util.http.ServiceUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -30,6 +32,61 @@ public class ProductCompositeService implements IProductComposite {
     public ProductCompositeService(ProductCompositeIntegration integration, ServiceUtil serviceUtil) {
         this.integration = integration;
         this.serviceUtil = serviceUtil;
+    }
+
+    /**
+     * @param productCompositeDTO A JSON representation of the new composite product
+     * @return
+     */
+    @Override
+    public Mono<ResponseEntity<ProductCompositeDTO>> createProduct(ProductCompositeDTO productCompositeDTO) {
+        log.info("createProduct: Received a request to create a composite product: {}", productCompositeDTO);
+
+        var productDTO = new ProductDTO(
+                productCompositeDTO.getProductId(),
+                productCompositeDTO.getName(),
+                productCompositeDTO.getWeight(),
+                serviceUtil.getServiceAddress());
+
+        Mono<ProductDTO> productDTOMono = integration.createProduct(productDTO).map(ResponseEntity::getBody);
+
+        Mono<List<RecommendationDTO>> recommendationDTOMono = Flux.fromIterable(productCompositeDTO.getRecommendations())
+                .flatMap(r -> {
+                    var recommendationDTO = new RecommendationDTO(
+                            productCompositeDTO.getProductId(),
+                            r.getRecommendationId(),
+                            r.getAuthor(),
+                            r.getRate(),
+                            r.getContent(),
+                            serviceUtil.getServiceAddress());
+                    return integration.createRecommendation(recommendationDTO);
+                })
+                .map(ResponseEntity::getBody)
+                .collectList();
+
+        Mono<List<ReviewDTO>> reviewDTOMono = Flux.fromIterable(productCompositeDTO.getReviews())
+                .flatMap(r -> {
+                    var reviewDTO = new ReviewDTO(
+                            productCompositeDTO.getProductId(),
+                            r.getReviewId(),
+                            r.getAuthor(),
+                            r.getSubject(),
+                            r.getContent(),
+                            serviceUtil.getServiceAddress());
+                    return integration.createReview(reviewDTO);
+                })
+                .map(ResponseEntity::getBody)
+                .collectList();
+
+        return productDTOMono
+                .flatMap(product -> recommendationDTOMono
+                        .flatMap(recommendations -> reviewDTOMono
+                                .map(reviews -> {
+                                    var compositeProduct = createCompositeProduct(product, recommendations, reviews, serviceUtil.getServiceAddress());
+                                    return new ResponseEntity<>(compositeProduct, HttpStatus.CREATED);
+                                })
+                        )
+                );
     }
 
     /**
@@ -72,19 +129,38 @@ public class ProductCompositeService implements IProductComposite {
                 .map(ResponseEntity::ok);
     }
 
+    /**
+     * @param productId Id of the product
+     * @return
+     */
+    @Override
+    public Mono<ResponseEntity<Void>> deleteProduct(int productId) {
+        log.info("Deleting product with id {}", productId);
+
+        return Mono.zip(
+                        integration.deleteProduct(productId),
+                        integration.deleteRecommendations(productId),
+                        integration.deleteReviews(productId)
+                )
+                .doOnNext(v -> log.info("Deleted product, recommendations, and reviews for product id {}", productId))
+                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)));
+    }
+
     private ProductCompositeDTO createCompositeProduct(ProductDTO product, List<RecommendationDTO> recommendations, List<ReviewDTO> reviews, String serviceAddress) {
         var recommendationSummaryDTO = recommendations.stream().
                 map(recommendation ->
                         new RecommendationSummaryDTO(
                                 recommendation.getRecommendationId(),
                                 recommendation.getAuthor(),
-                                recommendation.getRate()))
+                                recommendation.getRate(),
+                                recommendation.getContent()))
                 .toList();
         var reviewSummaryDTO = reviews.stream()
                 .map(review -> new ReviewSummaryDTO(
                         review.getReviewId(),
                         review.getAuthor(),
-                        review.getSubject()
+                        review.getSubject(),
+                        review.getContent()
                 ))
                 .toList();
         var productAddress = product.getServiceAddress();

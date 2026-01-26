@@ -52,6 +52,32 @@ public class ProductCompositeIntegration implements IProduct, IRecommendation, I
                 .onErrorResume(FeignException.class, this::handleFeignException);
     }
 
+    /**
+     * @param productDTO
+     * @return
+     */
+    @Override
+    public Mono<ResponseEntity<ProductDTO>> createProduct(ProductDTO productDTO) {
+        log.info("Creating product details received: {}", productDTO);
+        return productClient.createProduct(productDTO)
+                .doOnNext(product -> log.info("Product created: {}", product))
+                .map(p -> new ResponseEntity<>(p, HttpStatus.CREATED))
+                .onErrorResume(FeignException.class, this::handleFeignException);
+    }
+
+    /**
+     * @param productId
+     * @return
+     */
+    @Override
+    public Mono<ResponseEntity<Void>> deleteProduct(Integer productId) {
+        log.info("Deleting product details received: {}", productId);
+        return productClient.deleteProduct(productId)
+                .doOnNext(v -> log.info("Product deleted: {}", productId))
+                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
+                .onErrorResume(FeignException.class, this::handleFeignException);
+    }
+
     @Override
     public Mono<ResponseEntity<List<RecommendationDTO>>> getRecommendations(int productId) {
         log.info("Calling recommendation-service to fetch recommendations for product: {}", productId);
@@ -61,12 +87,62 @@ public class ProductCompositeIntegration implements IProduct, IRecommendation, I
                 .onErrorResume(FeignException.class, this::handleFeignException);
     }
 
+    /**
+     * @param recommendationDTO
+     * @return
+     */
+    @Override
+    public Mono<ResponseEntity<RecommendationDTO>> createRecommendation(RecommendationDTO recommendationDTO) {
+        log.info("Creating recommendation: {}", recommendationDTO);
+        return recommendationClient.createRecommendation(recommendationDTO)
+                .doOnNext(recommendation -> log.info("Recommendation created: {}", recommendation))
+                .map(r -> new ResponseEntity<>(r, HttpStatus.CREATED))
+                .onErrorResume(FeignException.class, this::handleFeignException);
+    }
+
+    /**
+     * @param productId
+     * @return
+     */
+    @Override
+    public Mono<ResponseEntity<Void>> deleteRecommendations(int productId) {
+        return recommendationClient.deleteRecommendations(productId)
+                .doOnNext(v -> log.info("Recommendations deleted for product: {}", productId))
+                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
+                .onErrorResume(FeignException.class, this::handleFeignException);
+    }
+
+    /**
+     * @param reviewDTO
+     * @return
+     */
+    @Override
+    public Mono<ResponseEntity<ReviewDTO>> createReview(ReviewDTO reviewDTO) {
+        log.info("Creating review: {}", reviewDTO);
+        return reviewClient.createReview(reviewDTO)
+                .doOnNext(review -> log.info("Review created: {}", review))
+                .map(r -> new ResponseEntity<>(r, HttpStatus.CREATED))
+                .onErrorResume(FeignException.class, this::handleFeignException);
+    }
+
     @Override
     public Mono<ResponseEntity<List<ReviewDTO>>> getReviews(int productId) {
         log.info("Calling review service to fetch review for product: {}", productId);
         return reviewClient.getReviews(productId)
                 .doOnNext(reviews -> log.debug("Reviews received for product: {} are {}", productId, reviews))
                 .map(ResponseEntity::ok)
+                .onErrorResume(FeignException.class, this::handleFeignException);
+    }
+
+    /**
+     * @param productId
+     * @return
+     */
+    @Override
+    public Mono<ResponseEntity<Void>> deleteReviews(int productId) {
+        return reviewClient.deleteReviews(productId)
+                .doOnNext(v -> log.info("Reviews deleted for product: {}", productId))
+                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)))
                 .onErrorResume(FeignException.class, this::handleFeignException);
     }
 
